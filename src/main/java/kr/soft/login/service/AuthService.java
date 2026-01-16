@@ -60,11 +60,11 @@ public class AuthService {
             log.info("비밀번호 불일치");
             return null;
         }
-            /**************
-            * ✅ JWT 생성
-            ***************/
 
 
+        /**************
+        * ✅ JWT 생성
+        ***************/
         //✅ 4. JWT 토큰 만들기
         String accessToken = jwtTokenProvider.createAccessToken(resultDTO.getUserIdx(), resultDTO.getUserId());
 
@@ -92,6 +92,8 @@ public class AuthService {
 
         return res;
     }
+
+
     public void Register(RegisterDTO registerDTO) {
 
         String encodedPw = PasswordUtil.encode(registerDTO.getUserPw());
