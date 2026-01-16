@@ -2,6 +2,7 @@ package kr.soft.login.api;
 
 import kr.soft.login.common.ApiResponse;
 import kr.soft.login.dto.Member.LoginReq;
+import kr.soft.login.dto.Member.MemberLoginRes;
 import kr.soft.login.dto.Member.RegisterDTO;
 import kr.soft.login.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class AuthController {
 
     // ✅ 로그인 API / URL 테스트 용
     @GetMapping("/test")
-    public ResponseEntity<ApiResponse<String>> login() {
+    public ResponseEntity<ApiResponse<MemberLoginRes>> login() {
 
         return ApiResponse.success(userService.login("super", "1234"));
     }
