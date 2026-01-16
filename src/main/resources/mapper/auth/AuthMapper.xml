@@ -19,10 +19,11 @@
     </select>
 
     <insert id="register" parameterType="RegisterDTO">
-        INSERT INTO MEMBER_TEST (
+        INSERT INTO MEMBER (
             USER_ID,
             USER_PW,
-            USER_NICKNAME,
+            NICKNAME,
+            MBTI,
             USER_EMAIL,
             CREATE_AT
         )
@@ -30,6 +31,7 @@
             #{userId},
             #{userPw},
             #{userNickname},
+            #{mbti},
             #{userEmail},
             SYSDATE()
         )

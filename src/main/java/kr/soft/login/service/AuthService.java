@@ -78,6 +78,8 @@ public class AuthService {
         //5. [ㅔRedis 등록] (access:userId 형태)
         redisTokenService.saveAccessToken(resultDTO.getUserId(), accessToken);
 
+        log.info("redis 등록");
+
         // ✅ 6. Response DTO 처리하기
         MemberLoginRes res = MemberLoginRes
                 .builder()
@@ -86,6 +88,9 @@ public class AuthService {
                 .mbti(resultDTO.getMbti())
                 .accesstoken(accessToken)
                 .build();
+
+        log.info("res: {}", res.toString());
+
 
 //        MemberLoginRes res = new MemberLoginRes(resultDTO, accessToken);
 
