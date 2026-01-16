@@ -25,13 +25,19 @@ public class AuthService {
 
 
 
-    // ✅ 로그인 처리
-
     /**
-     * @param ( 사용자 ID, PW 필요 ) - 로그인 구분 용도
-     * @return Token 정보
-                */
-    public String login(String id, String pw) {
+     * ✅ 로그인 처리
+     * 로그인 프로세스
+     * 작성일: 26-01-06
+     * @param id    사용자 입력한 ID
+     * @param pw    사용자가 입력한 PW
+     * @return MemberLoginRes
+     *     String accesstoken;     //사용자 토큰
+     *     String ninkname;        //사용자 닉네임
+     *     String mbti;            //사용자 MBTI
+     *     String title;           //사용자 칭호
+     */
+    public MemberLoginRes login(String id, String pw) {
 
         MemberLoginDTO  resultDTO = authMapper.login(id);
 
@@ -75,7 +81,7 @@ public class AuthService {
 //        MemberLoginRes res = new MemberLoginRes(resultDTO, accessToken);
 
 
-        return accessToken;
+        return res;
     }
     public void Register(RegisterDTO registerDTO) {
 

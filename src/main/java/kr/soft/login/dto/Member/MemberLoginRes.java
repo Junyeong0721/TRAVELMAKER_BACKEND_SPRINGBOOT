@@ -11,9 +11,9 @@ import lombok.Data;
 public class MemberLoginRes {
 
     private String accesstoken;     //사용자 토큰
-    private String ninkname;
-    private String mbti;
-    private String title;
+    private String ninkname;        //사용자 닉네임
+    private String mbti;            //사용자 MBTI
+    private String title;           //사용자 칭호
 
 
     /**
