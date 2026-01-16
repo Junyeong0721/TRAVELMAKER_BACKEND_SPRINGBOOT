@@ -34,6 +34,20 @@ public class AuthController {
     
 
     // ✅ 로그인 API
+
+    /**
+     * ✅ 로그인 API
+     * @param req
+     *     String userId;
+     *     String userPw;
+     * @return
+     * data": {
+     *         "accesstoken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwidXNlcklkIjoiYmJrczExNSIsImlhdCI6MTc2ODUzNTc3OCwiZXhwIjoxNzY4NTM3NTc4fQ.YZ0UP7QEEo6IA_vmtereMLmN84Iwg8ay3HF3MQ0fo2o",
+     *         "nickname": "조준영",
+     *         "mbti": "ISFP",
+     *         "title": "새내기 여행자"
+     *     }
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginReq req) {
 
