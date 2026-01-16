@@ -27,12 +27,9 @@ public class BoardController {
     public ResponseEntity<List<BoardListDTO>> list() {
         log.info("board list success");
 
-        List<BoardListDTO> lists = boardService.list();
+        List<BoardListDTO> boardlist = boardService.list();
 
-        return ResponseEntity.ok(lists);
-
-
-
+        return ResponseEntity.ok(boardlist);
     }
 
     @GetMapping("/detail")

@@ -6,6 +6,7 @@ import kr.soft.login.dto.Member.RegisterDTO;
 import kr.soft.login.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,7 +34,7 @@ public class AuthController {
 
     // ✅ 로그인 API
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<String>> login(@RequestBody LoginReq req) {
+    public ResponseEntity<?> login(@RequestBody LoginReq req) {
 
 
         return ApiResponse.success(userService.login(req.getUserId(), req.getUserPw()));
