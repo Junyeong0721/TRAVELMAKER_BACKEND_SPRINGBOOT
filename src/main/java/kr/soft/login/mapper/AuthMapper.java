@@ -10,7 +10,6 @@ public interface AuthMapper {
     /**
      * 로그인 프로세스
      * 작성일: 26-01-06
-     * 작업자: 명희승
      * @param param
      * @return MemberLoginDTO
      *     Long idx;           // pk
