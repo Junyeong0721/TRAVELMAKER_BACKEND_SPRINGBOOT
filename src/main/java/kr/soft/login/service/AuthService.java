@@ -84,7 +84,7 @@ public class AuthService {
         MemberLoginRes res = MemberLoginRes
                 .builder()
                 .title(resultDTO.getTitle())
-                .ninkname(resultDTO.getNickname())
+                .nickname(resultDTO.getNickname())
                 .mbti(resultDTO.getMbti())
                 .accesstoken(accessToken)
                 .build();
