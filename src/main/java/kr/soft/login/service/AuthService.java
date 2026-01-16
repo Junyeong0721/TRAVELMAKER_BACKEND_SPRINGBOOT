@@ -36,18 +36,26 @@ public class AuthService {
      *     String ninkname;        //사용자 닉네임
      *     String mbti;            //사용자 MBTI
      *     String title;           //사용자 칭호
+     *     
+     *     FALSE: NULL 처리
      */
     public MemberLoginRes login(String id, String pw) {
 
+        //✅ 1. 사용자 정보 조회
+        //id 검색 될 경우, 사용자 INFO 전체 조회
         MemberLoginDTO  resultDTO = authMapper.login(id);
 
         log.info("login resultDTO:{}", resultDTO);
-            // ex) memberMapper.login()
+
+        //✅ 2. 사용자 ID가 잘못 입력 되었을 경우, NULL 처리
         if(resultDTO == null) {
             return null;
         }
         log.info("login pw:{}", resultDTO.getUserPw());
 
+
+        //✅ 3. 사용자 암호 비교하기 ( 암호화 처리 )
+        // 실패 시, NULL 처리
         if(!PasswordUtil.matches(pw, resultDTO.getUserPw())) {
             log.info("비밀번호 불일치");
             return null;
@@ -57,7 +65,7 @@ public class AuthService {
             ***************/
 
 
-        //2. JWT 토큰 만들기
+        //✅ 4. JWT 토큰 만들기
         String accessToken = jwtTokenProvider.createAccessToken(resultDTO.getUserIdx(), resultDTO.getUserId());
 
         
@@ -67,9 +75,10 @@ public class AuthService {
          ***************/
 
         // ✅ UNIQUE이면 무엇이가든 가능
-        //3. Redis 등록 (access:userId 형태)
+        //5. [ㅔRedis 등록] (access:userId 형태)
         redisTokenService.saveAccessToken(resultDTO.getUserId(), accessToken);
 
+        // ✅ 6. Response DTO 처리하기
         MemberLoginRes res = MemberLoginRes
                 .builder()
                 .title(resultDTO.getTitle())
