@@ -66,7 +66,7 @@ public class AuthService {
         * ✅ JWT 생성
         ***************/
         //✅ 4. JWT 토큰 만들기
-        String accessToken = jwtTokenProvider.createAccessToken(resultDTO.getUserIdx(), resultDTO.getUserId());
+        String accessToken = jwtTokenProvider.createAccessToken(resultDTO.getIdx(), resultDTO.getUserId());
 
         
         
