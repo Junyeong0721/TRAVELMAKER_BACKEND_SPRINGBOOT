@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding = "UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.soft.login.mapper.BoardMapper">
+    <select id="login" parameterType="String" resultType="MemberLoginDTO">
+        SELECT
+            p.IDX,
+            p.TITLE,
+            m.NICKNAME,
+            m.MBTI,
+            p.VIEW_COUNT,
+            COUNT(DISTINCT l.IDX) AS LIKE_COUNT,
+            p.CREATE_AT,
+            m.TITLE AS USER_GRADE,
+            COUNT(DISTINCT c.IDX) AS COMMENT_COUNT
+        FROM
+            POSTS p
+        INNER JOIN
+            MEMBER m ON p.USER_IDX = m.IDX
+        LEFT JOIN
+            COMMENTS c ON p.IDX = c.POST_IDX AND c.DELETE_YN = 'N'
+        LEFT JOIN
+            LIKES l ON p.IDX = l.POST_IDX
+        WHERE
+            p.STATUS = 'PUBLISHED'
+        GROUP BY
+            p.IDX,
+            p.TITLE,
+            p.VIEW_COUNT,
+            p.CREATE_AT,
+            m.NICKNAME,
+            m.MBTI,
+            m.TITLE
+        ORDER BY
+            p.CREATE_AT DESC
+        LIMIT 4 OFFSET 0;
+
+
+    </select>
+</mapper>

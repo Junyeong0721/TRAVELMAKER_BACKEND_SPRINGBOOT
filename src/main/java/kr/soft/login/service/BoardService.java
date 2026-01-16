@@ -17,6 +17,8 @@ public class BoardService {
 
     public List<BoardListDTO> list() {
         List<BoardListDTO> lists = boardMapper.list();
+        log.info("lists size: {}", lists.size());
+        log.info("lists 불러오기 성공!");
         return lists;
     }
     public BoardDetailDTO detail(Long idx){
