@@ -3,6 +3,7 @@ package kr.soft.login.service;
 import kr.soft.login.config.jwt.JwtTokenProvider;
 import kr.soft.login.config.util.PasswordUtil;
 import kr.soft.login.dto.Member.MemberLoginDTO;
+import kr.soft.login.dto.Member.MemberLoginRes;
 import kr.soft.login.dto.Member.RegisterDTO;
 import kr.soft.login.mapper.AuthMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -62,6 +63,16 @@ public class AuthService {
         // ✅ UNIQUE이면 무엇이가든 가능
         //3. Redis 등록 (access:userId 형태)
         redisTokenService.saveAccessToken(resultDTO.getUserId(), accessToken);
+
+        MemberLoginRes res = MemberLoginRes
+                .builder()
+                .title(resultDTO.getTitle())
+                .ninkname(resultDTO.getNickname())
+                .mbti(resultDTO.getMbti())
+                .accesstoken(accessToken)
+                .build();
+
+//        MemberLoginRes res = new MemberLoginRes(resultDTO, accessToken);
 
 
         return accessToken;
