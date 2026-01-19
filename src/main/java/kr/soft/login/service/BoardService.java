@@ -17,8 +17,8 @@ public class BoardService {
     @Autowired
     private  BoardMapper boardMapper;
 
-    public List<BoardListDTO> list() {
-        List<BoardListDTO> lists = boardMapper.list();
+    public List<BoardListDTO> list(int offset) {
+        List<BoardListDTO> lists = boardMapper.list(offset);
         log.info("lists size: {}", lists.size());
         log.info("lists 불러오기 성공!");
         return lists;
@@ -30,5 +30,9 @@ public class BoardService {
     public void write(BoardWriteDTO boardWriteDTO) {
         boardMapper.write(boardWriteDTO);
 
+    }
+    public int getTotalCount(){
+
+        return boardMapper.count();
     }
 }
