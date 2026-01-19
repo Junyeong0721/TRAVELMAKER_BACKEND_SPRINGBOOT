@@ -34,7 +34,7 @@
             m.TITLE
         ORDER BY
             p.CREATE_AT DESC
-        LIMIT 4 OFFSET #{offset};
+        LIMIT 4 OFFSET #{offset}
 
 
     </select>
@@ -49,7 +49,7 @@
             #{planIdx},
             #{title},
             #{content}
-        )   q
+        )
     </insert>
     <select id="count" resultType="int">
         SELECT COUNT(*)
