@@ -1,16 +1,15 @@
 package kr.soft.login.api;
 
+import kr.soft.login.config.jwt.JwtTokenProvider;
 import kr.soft.login.dto.Board.BoardDetailDTO;
 import kr.soft.login.dto.Board.BoardListDTO;
+import kr.soft.login.dto.Board.BoardWriteDTO;
 import kr.soft.login.mapper.BoardMapper;
 import kr.soft.login.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 //수정
@@ -22,12 +21,16 @@ public class BoardController {
 
     @Autowired
     BoardService boardService;
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("/list")
     public ResponseEntity<List<BoardListDTO>> list() {
         log.info("board list success");
 
         List<BoardListDTO> boardlist = boardService.list();
+
+        log.info("data {}",  boardlist);
 
         return ResponseEntity.ok(boardlist);
     }
@@ -40,5 +43,20 @@ public class BoardController {
 
         return ResponseEntity.ok(detail);
 
+    }
+
+    @PostMapping("/write")
+    public ResponseEntity<Void> write(@RequestBody BoardWriteDTO boardWriteDTO,
+                                      @RequestAttribute("userIdx") long idx) {
+
+
+        log.info("idx: {}", idx);
+        boardWriteDTO.setUserIdx(idx);
+        log.info("data: {}", boardWriteDTO.toString());
+
+
+        boardService.write(boardWriteDTO);
+        log.info("data {}",  boardWriteDTO.toString());
+        return ResponseEntity.ok().build();
     }
 }

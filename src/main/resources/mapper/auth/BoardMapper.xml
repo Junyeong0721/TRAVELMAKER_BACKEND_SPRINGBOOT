@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.soft.login.mapper.BoardMapper">
-    <select id="login" parameterType="String" resultType="MemberLoginDTO">
+    <select id="list" parameterType="String" resultType="BoardListDTO">
         SELECT
             p.IDX,
             p.TITLE,
@@ -38,4 +38,17 @@
 
 
     </select>
+    <insert id="write" parameterType="BoardWriteDTO">
+        INSERT INTO POSTS (
+            USER_IDX,
+            PLAN_IDX,
+            TITLE,
+            CONTENT
+        ) VALUES (
+            #{userIdx},
+            #{planIdx},
+            #{title},
+            #{content}
+        )
+    </insert>
 </mapper>
