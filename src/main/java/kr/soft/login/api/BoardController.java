@@ -25,10 +25,10 @@ public class BoardController {
     JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("/list")
-    public ResponseEntity<List<BoardListDTO>> list() {
+    public ResponseEntity<List<BoardListDTO>> list(@RequestParam(defaultValue = "0") int offset) {
         log.info("board list success");
 
-        List<BoardListDTO> boardlist = boardService.list();
+        List<BoardListDTO> boardlist = boardService.list(offset);
 
         log.info("data {}",  boardlist);
 
@@ -58,5 +58,10 @@ public class BoardController {
         boardService.write(boardWriteDTO);
         log.info("data {}",  boardWriteDTO.toString());
         return ResponseEntity.ok().build();
+    }
+    @GetMapping("/count")
+    public ResponseEntity<Integer> getTotalCount() {
+        int count = boardService.getTotalCount();
+        return ResponseEntity.ok(count);
     }
 }

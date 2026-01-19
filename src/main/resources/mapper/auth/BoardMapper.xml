@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.soft.login.mapper.BoardMapper">
-    <select id="list" parameterType="String" resultType="BoardListDTO">
+    <select id="list" parameterType="int" resultType="BoardListDTO">
         SELECT
             p.IDX,
             p.TITLE,
@@ -34,7 +34,7 @@
             m.TITLE
         ORDER BY
             p.CREATE_AT DESC
-        LIMIT 4 OFFSET 0;
+        LIMIT 4 OFFSET #{offset}
 
 
     </select>
@@ -51,4 +51,9 @@
             #{content}
         )
     </insert>
+    <select id="count" resultType="int">
+        SELECT COUNT(*)
+        FROM POSTS
+        WHERE STATUS = 'PUBLISHED'
+    </select>
 </mapper>
