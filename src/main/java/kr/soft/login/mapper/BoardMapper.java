@@ -9,10 +9,11 @@ import java.util.List;
 
 @Mapper
 public interface BoardMapper {
-    List<BoardListDTO> list();
+    List<BoardListDTO> list(int offset);
 
     BoardDetailDTO detail(Long param);
 
     void write(BoardWriteDTO boardWriteDTO);
 
+    int count();
 }
