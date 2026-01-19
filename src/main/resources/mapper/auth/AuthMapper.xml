@@ -6,19 +6,24 @@
 
     <select id="login" parameterType="String" resultType="MemberLoginDTO">
         SELECT
-            USER_IDX, USER_ID, USER_PW
-        FROM
-            MEMBER_TEST
+            IDX               -- USER_PK
+            ,USER_ID          -- USER 아이디
+            ,USER_PW          -- USER 패스워드
+            ,NICKNAME         -- USER 닉네임
+            ,MBTI             -- USER MBTI 성향
+            ,TITLE            -- USER 칭호
+        FROM MEMBER
         WHERE
             USER_ID = #{param}
 
     </select>
 
     <insert id="register" parameterType="RegisterDTO">
-        INSERT INTO MEMBER_TEST (
+        INSERT INTO MEMBER (
             USER_ID,
             USER_PW,
-            USER_NICKNAME,
+            NICKNAME,
+            MBTI,
             USER_EMAIL,
             CREATE_AT
         )
@@ -26,6 +31,7 @@
             #{userId},
             #{userPw},
             #{userNickname},
+            #{mbti},
             #{userEmail},
             SYSDATE()
         )

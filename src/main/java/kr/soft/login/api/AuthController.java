@@ -2,10 +2,12 @@ package kr.soft.login.api;
 
 import kr.soft.login.common.ApiResponse;
 import kr.soft.login.dto.Member.LoginReq;
+import kr.soft.login.dto.Member.MemberLoginRes;
 import kr.soft.login.dto.Member.RegisterDTO;
 import kr.soft.login.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,15 +27,29 @@ public class AuthController {
 
     // ✅ 로그인 API / URL 테스트 용
     @GetMapping("/test")
-    public ResponseEntity<ApiResponse<String>> login() {
+    public ResponseEntity<ApiResponse<MemberLoginRes>> login() {
 
         return ApiResponse.success(userService.login("super", "1234"));
     }
     
 
     // ✅ 로그인 API
+
+    /**
+     * ✅ 로그인 API
+     * @param req
+     *     String userId;
+     *     String userPw;
+     * @return
+     * data": {
+     *         "accesstoken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwidXNlcklkIjoiYmJrczExNSIsImlhdCI6MTc2ODUzNTc3OCwiZXhwIjoxNzY4NTM3NTc4fQ.YZ0UP7QEEo6IA_vmtereMLmN84Iwg8ay3HF3MQ0fo2o",
+     *         "nickname": "조준영",
+     *         "mbti": "ISFP",
+     *         "title": "새내기 여행자"
+     *     }
+     */
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<String>> login(@RequestBody LoginReq req) {
+    public ResponseEntity<?> login(@RequestBody LoginReq req) {
 
 
         return ApiResponse.success(userService.login(req.getUserId(), req.getUserPw()));
