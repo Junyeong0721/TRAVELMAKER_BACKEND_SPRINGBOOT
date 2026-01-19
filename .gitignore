@@ -36,3 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 mysql_data/
+
+### DB 설정 파일
+src/main/resources/application.yam
