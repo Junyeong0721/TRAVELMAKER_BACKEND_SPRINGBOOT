@@ -74,6 +74,10 @@ public class AuthInterceptor implements HandlerInterceptor {
         // ✅ 6) TTL 갱신 (30분)
         redisTokenService.refreshAccessTokenTTL(userId);
 
+        long userIdx = jwtTokenProvider.getUserIdx(token);
+        log.info("test: {}", userIdx);
+        request.setAttribute("userIdx", userIdx);
+
         return true;
     }
 }

@@ -2,9 +2,11 @@ package kr.soft.login.service;
 
 import kr.soft.login.dto.Board.BoardDetailDTO;
 import kr.soft.login.dto.Board.BoardListDTO;
+import kr.soft.login.dto.Board.BoardWriteDTO;
 import kr.soft.login.mapper.BoardMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,5 +26,9 @@ public class BoardService {
     public BoardDetailDTO detail(Long idx){
         BoardDetailDTO detail = boardMapper.detail(idx);
         return detail;
+    }
+    public void write(BoardWriteDTO boardWriteDTO) {
+        boardMapper.write(boardWriteDTO);
+
     }
 }
