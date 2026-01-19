@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.soft.login.mapper.PlanMapper">
+
+    <insert id="insertPlan" parameterType="kr.soft.login.dto.PlanSaveRequest" useGeneratedKeys="true" keyProperty="planIdx" keyColumn="IDX">
+        INSERT INTO plans (
+        USER_IDX,
+        TITLE,
+        IS_AI,
+        DELETE_YN,
+        CREATE_AT
+        ) VALUES (
+        #{userIdx},
+        #{title},
+        1,     'N',   NOW()
+        )
+    </insert>
+
+    <insert id="insertDetail">
+        INSERT INTO plan_detail (
+        PLAN_IDX,
+        PLAN_TITLE,
+        VISIT_ORDER,
+        TYPES,
+        VISIT_TIME,
+        ADDRESS
+        ) VALUES (
+        #{planIdx},
+        #{detail.title},
+        #{detail.day},
+        #{detail.category},
+        #{detail.time},
+        #{detail.address}
+        )
+    </insert>
+
+</mapper>
