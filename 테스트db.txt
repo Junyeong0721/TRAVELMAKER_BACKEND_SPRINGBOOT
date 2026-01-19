@@ -1,0 +1,86 @@
+-- 1. 유저 테이블: 회원 정보 및 서비스 상태 관리
+CREATE TABLE MEMBER (
+    IDX BIGINT AUTO_INCREMENT PRIMARY KEY,
+    USER_ID VARCHAR(100) NOT NULL UNIQUE,          -- 로그인 ID
+    USER_PW VARCHAR(255) NOT NULL,              -- 암호화된 비밀번호
+    NICKNAME VARCHAR(50) NOT NULL,               -- 닉네임
+    MBTI VARCHAR(4),                             -- 사용자 MBTI
+    USER_COMMENT			--자기소개
+    TITLE VARCHAR(50) DEFAULT '새내기 여행자',     -- 획득/장착 칭호
+    STATUS BOOLEAN DEFAULT 'ACTIVE',         -- 상태: 0(정상), 1(탈퇴)
+    CREATE_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2. 팔로우 테이블: 유저 간 단방향 관계 저장
+CREATE TABLE FOLLOW (
+    IDX BIGINT AUTO_INCREMENT PRIMARY KEY,
+    FOLLOW_IDX BIGINT NOT NULL,                 -- 팔로우를 누른 사람
+    FOLLOWING_IDX BIGINT NOT NULL,                -- 팔로우를 받은 사람
+    FAVORITE_YN CHAR(1) DEFAULT 'N',
+    DELETE_YN CHAR(1) DEFAULT 'N',               -- N: 팔로우중, Y: 언팔로우
+    CREATE_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (follower_id) REFERENCES users(id),
+    FOREIGN KEY (following_id) REFERENCES users(id),
+    UNIQUE KEY unique_follow (follower_id, following_id) -- 중복 팔로우 방지
+);
+
+-- 3. 플래너 테이블: 여행 계획의 큰 단위 (봉투 역할)
+CREATE TABLE PLANS (
+    IDX BIGINT AUTO_INCREMENT PRIMARY KEY,
+    USER_IDX BIGINT NOT NULL,                     -- 플래너 주인
+    TITLE VARCHAR(100) NOT NULL,                 -- 여행 제목 (예: 제주도 힐링 여행)
+    IS_AI TINYINT(1) DEFAULT 0,        -- 0:직접작성, 1:AI생성
+    DELETE_YN CHAR(1) DEFAULT 'N',               -- 삭제 여부
+    CREATE_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- 4. 플래너 상세 테이블: 여행 일정별 구체적 장소 정보 (알맹이 역할)
+CREATE TABLE PLAN_DETAIL (
+    IDX BIGINT AUTO_INCREMENT PRIMARY KEY,
+    PLAN_IDX BIGINT NOT NULL,                     -- 소속된 플래너 ID
+    PLAN_TITLE VARCHAR(100) NOT NULL,            -- 장소명
+    VISIT_ORDER INT NOT NULL,                    -- 방문 순서 (1, 2, 3...)
+    TYPES VARCHAR(100),  			--음식점 종류
+    VISIT_TIME TIME,                             -- 방문 시간
+    MEMO TEXT,                                   -- 장소 설명 또는 메모
+    ADDRESS VARCHAR(255),                        -- 지도 표시용 주소
+    FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE
+);
+
+-- 5. 게시판 테이블: 커뮤니티 글과 플래너 결합
+CREATE TABLE POSTS (
+    IDX BIGINT AUTO_INCREMENT PRIMARY KEY,
+    USER_IDX BIGINT NOT NULL,                     -- 작성자
+    PLAN_IDX BIGINT,                  
+    TITLE VARCHAR(200) NOT NULL,                 -- 글 제목
+    CONTENT TEXT,                                -- 글 본문(코멘트)
+    STATUS VARCHAR(20) DEFAULT 'PUBLISHED',      -- PUBLISHED(공유), DELETED(삭제)
+    VIEW_COUNT INT DEFAULT 0,                    -- 조회수
+    CREATE_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (plan_id) REFERENCES plans(id)
+);
+
+-- 6. 댓글 테이블: 게시글 피드백
+CREATE TABLE COMMENTS (
+    IDX BIGINT AUTO_INCREMENT PRIMARY KEY,
+    POST_IDX BIGINT NOT NULL,                     -- 게시글 ID
+    USER_IDX BIGINT NOT NULL,                     -- 작성자 ID
+    CONTENT TEXT NOT NULL,                       -- 댓글 내용
+    DELETE_YN CHAR(1) DEFAULT 'N',               -- N:정상, Y:삭제됨
+    CREATE_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES posts(id),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- 7. 좋아요 테이블: 게시글 반응 수집
+CREATE TABLE LIKES (
+    IDX BIGINT AUTO_INCREMENT PRIMARY KEY,
+    POST_IDX BIGINT NOT NULL,                     -- 게시글 ID
+    USER_IDX BIGINT NOT NULL,                     -- 좋아요 누른 유저
+    CREATE_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES posts(id),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    UNIQUE KEY unique_like (post_id, user_id)     -- 한 게시글에 좋아요 한 번만 가능
+);
