@@ -35,4 +35,41 @@
         )
     </insert>
 
+    <select id="selectPlansByUser" resultType="kr.soft.login.dto.PlanResponse">
+        SELECT
+        IDX AS planIdx,
+        TITLE AS title,
+        CREATE_AT AS createAt
+        FROM plans
+        WHERE USER_IDX = #{userIdx}
+        ORDER BY CREATE_AT DESC
+    </select>
+
+    <select id="selectPlanDetails" resultType="kr.soft.login.dto.PlanResponse$DetailResponse">
+        SELECT
+        VISIT_ORDER AS day,
+        VISIT_TIME AS time,
+        PLAN_TITLE AS title,
+        ADDRESS AS address,
+        TYPES AS category
+        FROM plan_detail
+        WHERE PLAN_IDX = #{planIdx}
+        ORDER BY VISIT_ORDER ASC, VISIT_TIME ASC
+    </select>
+    <update id="deletePlan">
+        UPDATE plans
+        SET DELETE_YN = 'Y'
+        WHERE IDX = #{planIdx}
+    </update>
+
+    <select id="selectPlansByUser" resultType="kr.soft.login.dto.PlanResponse">
+        SELECT
+        IDX AS planIdx,
+        TITLE AS title,
+        CREATE_AT AS createAt
+        FROM plans
+        WHERE USER_IDX = #{userIdx}
+        AND (DELETE_YN = 'N' OR DELETE_YN IS NULL) ORDER BY CREATE_AT DESC
+    </select>
+
 </mapper>

@@ -1,10 +1,13 @@
 package kr.soft.login.service;
 
+import kr.soft.login.dto.PlanResponse;
 import kr.soft.login.dto.PlanSaveRequest;
 import kr.soft.login.mapper.PlanMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,5 +28,23 @@ public class PlanService {
                 planMapper.insertDetail(newPlanIdx, detail);
             }
         }
+    }
+    // [추가] 사용자별 계획 전체 조회
+    public List<PlanResponse> getMyPlans(Long userIdx) {
+        // 1. 계획 껍데기(부모) 리스트 가져오기
+        List<PlanResponse> plans = planMapper.selectPlansByUser(userIdx);
+
+        // 2. 각 계획마다 상세 일정(자식) 채워 넣기
+        for (PlanResponse p : plans) {
+            List<PlanResponse.DetailResponse> details = planMapper.selectPlanDetails(p.getPlanIdx());
+            p.setDetails(details);
+        }
+
+        return plans;
+    }
+    // [추가] 계획 삭제 로직
+    @Transactional
+    public void deletePlan(Long planIdx) {
+        planMapper.deletePlan(planIdx);
     }
 }
