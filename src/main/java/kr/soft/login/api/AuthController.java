@@ -28,7 +28,7 @@ public class AuthController {
     // ✅ 로그인 API / URL 테스트 용
     @GetMapping("/test")
     public ResponseEntity<ApiResponse<MemberLoginRes>> login() {
-
+        //test
         return ApiResponse.success(userService.login("super", "1234"));
     }
     
