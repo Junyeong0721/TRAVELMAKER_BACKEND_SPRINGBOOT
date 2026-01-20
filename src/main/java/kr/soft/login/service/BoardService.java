@@ -1,6 +1,7 @@
 package kr.soft.login.service;
 
 import kr.soft.login.dto.Board.BoardDetailDTO;
+import kr.soft.login.dto.Board.BoardDetailResponse;
 import kr.soft.login.dto.Board.BoardListDTO;
 import kr.soft.login.dto.Board.BoardWriteDTO;
 import kr.soft.login.mapper.BoardMapper;
@@ -23,9 +24,20 @@ public class BoardService {
         log.info("lists 불러오기 성공!");
         return lists;
     }
-    public BoardDetailDTO detail(Long idx){
-        BoardDetailDTO detail = boardMapper.detail(idx);
-        return detail;
+    public BoardDetailResponse detail(Long idx){
+
+        boardMapper.plusViewCount(idx);
+
+        BoardDetailResponse response = new BoardDetailResponse();
+
+        response.setPost(boardMapper.detail(idx));
+        response.setRoadmap(boardMapper.roadmap(idx));
+        response.setComments(boardMapper.comment(idx));
+        log.info("comment : {}",response.getComments());
+        log.info("roadmap : {}",response.getRoadmap());
+        return response;
+
+
     }
     public void write(BoardWriteDTO boardWriteDTO) {
         boardMapper.write(boardWriteDTO);
