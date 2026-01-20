@@ -33,6 +33,7 @@ public class BoardService {
         response.setPost(boardMapper.detail(idx));
         response.setRoadmap(boardMapper.roadmap(idx));
         response.setComments(boardMapper.comment(idx));
+        log.info("post : {} ", response.getPost());
         log.info("comment : {}",response.getComments());
         log.info("roadmap : {}",response.getRoadmap());
         return response;
