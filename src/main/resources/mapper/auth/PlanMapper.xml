@@ -1,9 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="kr.soft.login.mapper.PlanMapper">
 
-    <insert id="insertPlan" parameterType="kr.soft.login.dto.PlanSaveRequest" useGeneratedKeys="true" keyProperty="planIdx" keyColumn="IDX">
+    <insert id="insertPlan" parameterType="kr.soft.login.dto.PlanSaveRequest"
+            useGeneratedKeys="true" keyProperty="planIdx" keyColumn="IDX">
         INSERT INTO plans (
         USER_IDX,
         TITLE,
@@ -13,7 +15,9 @@
         ) VALUES (
         #{userIdx},
         #{title},
-        1,     'N',   NOW()
+        1,
+        'N',
+        NOW()
         )
     </insert>
 
@@ -45,7 +49,7 @@
         ORDER BY CREATE_AT DESC
     </select>
 
-    <select id="selectPlanDetails" resultType="kr.soft.login.dto.PlanResponse$DetailResponse">
+    <select id="selectPlanDetails" resultType="kr.soft.login.dto.PlanDetailDto">
         SELECT
         VISIT_ORDER AS day,
         VISIT_TIME AS time,
@@ -56,20 +60,28 @@
         WHERE PLAN_IDX = #{planIdx}
         ORDER BY VISIT_ORDER ASC, VISIT_TIME ASC
     </select>
+
     <update id="deletePlan">
         UPDATE plans
         SET DELETE_YN = 'Y'
         WHERE IDX = #{planIdx}
     </update>
 
-    <select id="selectPlansByUser" resultType="kr.soft.login.dto.PlanResponse">
+    <select id="selectPlanById" resultType="kr.soft.login.dto.PlanResponse">
         SELECT
         IDX AS planIdx,
         TITLE AS title,
         CREATE_AT AS createAt
         FROM plans
-        WHERE USER_IDX = #{userIdx}
-        AND (DELETE_YN = 'N' OR DELETE_YN IS NULL) ORDER BY CREATE_AT DESC
+        WHERE IDX = #{planIdx}
     </select>
+
+    <update id="updatePlanTitle">
+        UPDATE plans SET TITLE = #{title} WHERE IDX = #{planIdx}
+    </update>
+
+    <delete id="deleteDetailsByPlanIdx">
+        DELETE FROM plan_detail WHERE PLAN_IDX = #{planIdx}
+    </delete>
 
 </mapper>

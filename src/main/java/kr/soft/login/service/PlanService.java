@@ -1,5 +1,6 @@
 package kr.soft.login.service;
 
+import kr.soft.login.dto.PlanDetailDto;
 import kr.soft.login.dto.PlanResponse;
 import kr.soft.login.dto.PlanSaveRequest;
 import kr.soft.login.mapper.PlanMapper;
@@ -36,7 +37,7 @@ public class PlanService {
 
         // 2. 각 계획마다 상세 일정(자식) 채워 넣기
         for (PlanResponse p : plans) {
-            List<PlanResponse.DetailResponse> details = planMapper.selectPlanDetails(p.getPlanIdx());
+            List<PlanDetailDto> details = planMapper.selectPlanDetails(p.getPlanIdx());
             p.setDetails(details);
         }
 
@@ -46,5 +47,30 @@ public class PlanService {
     @Transactional
     public void deletePlan(Long planIdx) {
         planMapper.deletePlan(planIdx);
+    }
+
+    // 1. 단건 조회
+    public PlanResponse getPlan(Long planIdx) {
+        PlanResponse plan = planMapper.selectPlanById(planIdx);
+        if(plan != null) {
+            plan.setDetails(planMapper.selectPlanDetails(planIdx));
+        }
+        return plan;
+    }
+
+    // 2. 수정 (Update)
+    @Transactional
+    public void updatePlan(PlanSaveRequest req) {
+        // 1. 부모(Title) 수정
+        planMapper.updatePlanTitle(req.getPlanIdx(), req.getTitle());
+
+        // 2. 자식(Details) 싹 지우고 다시 저장 (가장 확실한 방법)
+        planMapper.deleteDetailsByPlanIdx(req.getPlanIdx());
+
+        if (req.getDetails() != null) {
+            for (PlanSaveRequest.DetailDto detail : req.getDetails()) {
+                planMapper.insertDetail(req.getPlanIdx(), detail);
+            }
+        }
     }
 }

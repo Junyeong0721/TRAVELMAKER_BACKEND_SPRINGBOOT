@@ -36,4 +36,15 @@ public class PlanController {
         planService.deletePlan(planIdx);
         return ResponseEntity.ok("삭제되었습니다.");
     }
+    @GetMapping("/{planIdx}")
+    public ResponseEntity<PlanResponse> getPlan(@PathVariable Long planIdx) {
+        return ResponseEntity.ok(planService.getPlan(planIdx));
+    }
+
+    // 수정 저장
+    @PutMapping("/update")
+    public ResponseEntity<String> updatePlan(@RequestBody PlanSaveRequest req) {
+        planService.updatePlan(req);
+        return ResponseEntity.ok("수정 완료");
+    }
 }

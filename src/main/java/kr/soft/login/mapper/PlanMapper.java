@@ -1,5 +1,6 @@
 package kr.soft.login.mapper;
 
+import kr.soft.login.dto.PlanDetailDto;
 import kr.soft.login.dto.PlanResponse;
 import kr.soft.login.dto.PlanSaveRequest;
 import org.apache.ibatis.annotations.Mapper;
@@ -18,8 +19,15 @@ public interface PlanMapper {
     List<PlanResponse> selectPlansByUser(Long userIdx);
 
     // [추가] 상세 일정 조회
-    List<PlanResponse.DetailResponse> selectPlanDetails(Long planIdx);
+    List<PlanDetailDto> selectPlanDetails(Long planIdx);
 
     // [추가] 계획 삭제
     void deletePlan(Long planIdx);
+
+    PlanResponse selectPlanById(Long planIdx);
+
+    void updatePlanTitle(Long planIdx, String title);
+
+    void deleteDetailsByPlanIdx(Long planIdx);
+
 }
