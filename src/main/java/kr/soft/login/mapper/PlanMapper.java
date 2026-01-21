@@ -30,4 +30,5 @@ public interface PlanMapper {
 
     void deleteDetailsByPlanIdx(Long planIdx);
 
+    void deletePlanDetails(Long planIdx);
 }

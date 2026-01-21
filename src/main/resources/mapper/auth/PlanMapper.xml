@@ -61,11 +61,15 @@
         ORDER BY VISIT_ORDER ASC, VISIT_TIME ASC
     </select>
 
-    <update id="deletePlan">
-        UPDATE plans
-        SET DELETE_YN = 'Y'
+    <delete id="deletePlan">
+        DELETE FROM plans
         WHERE IDX = #{planIdx}
-    </update>
+    </delete>
+
+    <delete id="deletePlanDetails">
+        DELETE FROM plan_detail
+        WHERE plan_idx = #{planIdx}
+    </delete>
 
     <select id="selectPlanById" resultType="kr.soft.login.dto.PlanResponse">
         SELECT
