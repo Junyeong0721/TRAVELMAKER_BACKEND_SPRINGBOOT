@@ -43,9 +43,7 @@ jwt:
   secret: my-super-secret-key-12345678901234567890
 
 openai:
-  api-key: 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
-  model: gpt-4o-mini
-
+  api-key: ${OPENAI_API_KEY}
 logging:
   level:
     org.springframework.web: DEBUG
