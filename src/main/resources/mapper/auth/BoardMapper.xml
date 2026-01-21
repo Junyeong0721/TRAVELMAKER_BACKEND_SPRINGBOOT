@@ -10,6 +10,7 @@
             m.NICKNAME,
             m.MBTI,
             p.VIEW_COUNT,
+            p.THUMBNAIL, -- ✅ 추가된 부분
             COUNT(DISTINCT l.IDX) AS LIKE_COUNT,
             p.CREATE_AT,
             m.TITLE AS USER_GRADE,
@@ -29,6 +30,7 @@
             p.TITLE,
             p.VIEW_COUNT,
             p.CREATE_AT,
+            p.THUMBNAIL, -- ✅ GROUP BY에도 반드시 추가해야 에러가 안 납니다
             m.NICKNAME,
             m.MBTI,
             m.TITLE
@@ -43,12 +45,14 @@
             USER_IDX,
             PLAN_IDX,
             TITLE,
-            CONTENT
+            CONTENT,
+            THUMBNAIL
         ) VALUES (
             #{userIdx},
             #{planIdx},
             #{title},
-            #{content}
+            #{content},
+            #{thumbnail}
         )
     </insert>
     <select id="count" resultType="int">
