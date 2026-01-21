@@ -5,6 +5,7 @@ import kr.soft.login.dto.Board.BoardDetailDTO;
 import kr.soft.login.dto.Board.BoardDetailResponse;
 import kr.soft.login.dto.Board.BoardListDTO;
 import kr.soft.login.dto.Board.BoardWriteDTO;
+import kr.soft.login.dto.comment.CommentReq;
 import kr.soft.login.mapper.BoardMapper;
 import kr.soft.login.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +65,17 @@ public class BoardController {
     public ResponseEntity<Integer> getTotalCount() {
         int count = boardService.getTotalCount();
         return ResponseEntity.ok(count);
+    }
+
+    @GetMapping("/comment")
+    public ResponseEntity<?> comment(@ModelAttribute CommentReq req,
+                                        @RequestAttribute("userIdx") long userIdx){
+        log.info("comment {} ", req.toString());
+        req.setUserIdx(userIdx);
+        boardService.insertcomment(req);
+
+
+        return ResponseEntity.ok().build();
     }
 
 }
