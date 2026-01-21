@@ -53,7 +53,7 @@ public class BoardController {
 
         log.info("idx: {}", idx);
         boardWriteDTO.setUserIdx(idx);
-        log.info("data: {}", boardWriteDTO.toString());
+        log.info("data input: {}", boardWriteDTO.toString());
 
 
         boardService.write(boardWriteDTO);
@@ -65,4 +65,5 @@ public class BoardController {
         int count = boardService.getTotalCount();
         return ResponseEntity.ok(count);
     }
+
 }

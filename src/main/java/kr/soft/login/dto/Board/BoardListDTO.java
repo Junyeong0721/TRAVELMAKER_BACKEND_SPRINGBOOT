@@ -13,5 +13,6 @@ public class BoardListDTO {
     private Integer viewCount;
     private Integer commentCount;
     private Integer likeCount;
+    private String thumbnail;
 
 }
