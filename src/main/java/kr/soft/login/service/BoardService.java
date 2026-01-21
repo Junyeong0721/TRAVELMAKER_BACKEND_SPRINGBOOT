@@ -4,6 +4,7 @@ import kr.soft.login.dto.Board.BoardDetailDTO;
 import kr.soft.login.dto.Board.BoardDetailResponse;
 import kr.soft.login.dto.Board.BoardListDTO;
 import kr.soft.login.dto.Board.BoardWriteDTO;
+import kr.soft.login.dto.comment.CommentReq;
 import kr.soft.login.mapper.BoardMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +48,9 @@ public class BoardService {
     public int getTotalCount(){
 
         return boardMapper.count();
+    }
+    public void insertcomment(CommentReq commentReq){
+        log.info("연결");
+        boardMapper.insertcomment(commentReq);
     }
 }
