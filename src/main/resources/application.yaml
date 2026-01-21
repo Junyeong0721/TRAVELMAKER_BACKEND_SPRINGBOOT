@@ -18,8 +18,8 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/TRAVELMAKER_DB?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: root
+    url: jdbc:mysql://192.168.40.74:3306/TRAVELMAKER_DB?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: study
     password: 1234
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
@@ -34,6 +34,17 @@ mybatis:
 
 server:
   port: 8085
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: always
 
 jwt:
   secret: my-super-secret-key-12345678901234567890
+
+openai:
+  api-key: ${OPENAI_API_KEY}
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG

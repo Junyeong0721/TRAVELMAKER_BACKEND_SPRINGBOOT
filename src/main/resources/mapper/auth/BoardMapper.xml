@@ -10,6 +10,7 @@
             m.NICKNAME,
             m.MBTI,
             p.VIEW_COUNT,
+            p.THUMBNAIL, -- ✅ 추가된 부분
             COUNT(DISTINCT l.IDX) AS LIKE_COUNT,
             p.CREATE_AT,
             m.TITLE AS USER_GRADE,
@@ -29,6 +30,7 @@
             p.TITLE,
             p.VIEW_COUNT,
             p.CREATE_AT,
+            p.THUMBNAIL, -- ✅ GROUP BY에도 반드시 추가해야 에러가 안 납니다
             m.NICKNAME,
             m.MBTI,
             m.TITLE
@@ -43,12 +45,14 @@
             USER_IDX,
             PLAN_IDX,
             TITLE,
-            CONTENT
+            CONTENT,
+            THUMBNAIL
         ) VALUES (
             #{userIdx},
             #{planIdx},
             #{title},
-            #{content}
+            #{content},
+            #{thumbnail}
         )
     </insert>
     <select id="count" resultType="int">
@@ -56,4 +60,67 @@
         FROM POSTS
         WHERE STATUS = 'PUBLISHED'
     </select>
+
+    <select id="detail" parameterType="long" resultType="BoardDetailDTO">
+        SELECT
+            p.IDX,
+            p.TITLE,
+            p.CONTENT,
+            p.VIEW_COUNT,
+            p.CREATE_AT,
+            m.NICKNAME,
+            m.MBTI,
+            m.TITLE AS userGrade,
+            m.USER_COMMENT AS userIntro,
+            (SELECT COUNT(*) FROM LIKES l WHERE l.POST_IDX = p.IDX) AS likeCount
+        FROM
+            POSTS p
+        INNER JOIN
+            MEMBER m ON p.USER_IDX = m.IDX
+        WHERE
+            p.IDX = #{idx} AND p.STATUS = 'PUBLISHED'
+    </select>
+
+    <select id="roadmap" parameterType="long" resultType="RoadmapDTO">
+        SELECT
+            PLAN_TITLE as planTitle,
+            VISIT_ORDER as visitOrder,
+            VISIT_TIME as visitTime,
+            MEMO as memo,
+            TYPES as types,
+            ADDRESS as address
+        FROM
+            PLAN_DETAIL
+        WHERE
+            PLAN_IDX = (SELECT PLAN_IDX FROM POSTS WHERE IDX = #{idx})
+        ORDER BY
+            VISIT_ORDER ASC
+    </select>
+
+    <select id="comment" parameterType="long" resultType="CommentDTO">
+        SELECT
+            c.IDX as idx,
+            c.CONTENT as content,
+            c.CREATE_AT as createAt,
+            m.NICKNAME as nickname,
+            m.MBTI as mbti
+        FROM
+            COMMENTS c
+        INNER JOIN
+            MEMBER m ON c.USER_IDX = m.IDX
+        WHERE
+            c.POST_IDX = #{idx} AND c.DELETE_YN = 'N'
+        ORDER BY
+            c.CREATE_AT ASC
+    </select>
+
+    <update id="plusViewCount" parameterType="long">
+        UPDATE POSTS
+            SET VIEW_COUNT = VIEW_COUNT + 1
+        WHERE IDX = #{idx}
+    </update>
+
+
+
+
 </mapper>

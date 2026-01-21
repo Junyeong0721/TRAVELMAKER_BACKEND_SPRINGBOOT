@@ -23,9 +23,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        System.out.println("✅ SecurityConfig.filterChain LOADED");
         http
                 .csrf(csrf -> csrf.disable())  // CSRF 비활성화 (REST API용)
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/ai/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll() // ✅ JWT 테스트 경로 허용
                         .anyRequest().permitAll() // 임시로 모든 요청 허용
                 )

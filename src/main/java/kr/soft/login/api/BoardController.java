@@ -2,6 +2,7 @@ package kr.soft.login.api;
 
 import kr.soft.login.config.jwt.JwtTokenProvider;
 import kr.soft.login.dto.Board.BoardDetailDTO;
+import kr.soft.login.dto.Board.BoardDetailResponse;
 import kr.soft.login.dto.Board.BoardListDTO;
 import kr.soft.login.dto.Board.BoardWriteDTO;
 import kr.soft.login.mapper.BoardMapper;
@@ -36,10 +37,10 @@ public class BoardController {
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<BoardDetailDTO> detail(@RequestParam("idx") Long idx) {
+    public ResponseEntity<BoardDetailResponse> detail(@RequestParam("idx") Long idx) {
         log.info("board detail success");
 
-        BoardDetailDTO detail = boardService.detail(idx);
+        BoardDetailResponse detail = boardService.detail(idx);
 
         return ResponseEntity.ok(detail);
 
@@ -52,7 +53,7 @@ public class BoardController {
 
         log.info("idx: {}", idx);
         boardWriteDTO.setUserIdx(idx);
-        log.info("data: {}", boardWriteDTO.toString());
+        log.info("data input: {}", boardWriteDTO.toString());
 
 
         boardService.write(boardWriteDTO);
@@ -64,4 +65,5 @@ public class BoardController {
         int count = boardService.getTotalCount();
         return ResponseEntity.ok(count);
     }
+
 }

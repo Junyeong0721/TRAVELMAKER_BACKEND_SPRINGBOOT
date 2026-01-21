@@ -28,7 +28,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // SecurityContextHolder에 사용자 정보 저장할 수 있음 (필요 시)
         }
         filterChain.doFilter(request, response);
+
     }
+
 
     private String resolveToken(HttpServletRequest request) {
         String bearer = request.getHeader("Authorization");
