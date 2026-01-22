@@ -6,6 +6,7 @@ import kr.soft.login.dto.Board.BoardDetailResponse;
 import kr.soft.login.dto.Board.BoardListDTO;
 import kr.soft.login.dto.Board.BoardWriteDTO;
 import kr.soft.login.dto.comment.CommentReq;
+import kr.soft.login.dto.plan.SelectPlanDTO;
 import kr.soft.login.mapper.BoardMapper;
 import kr.soft.login.service.BoardService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,18 +29,15 @@ public class BoardController {
 
     @GetMapping("/list")
     public ResponseEntity<List<BoardListDTO>> list(@RequestParam(defaultValue = "0") int offset) {
-        log.info("board list success");
 
         List<BoardListDTO> boardlist = boardService.list(offset);
 
-        log.info("data {}",  boardlist);
 
         return ResponseEntity.ok(boardlist);
     }
 
     @GetMapping("/detail")
     public ResponseEntity<BoardDetailResponse> detail(@RequestParam("idx") Long idx) {
-        log.info("board detail success");
 
         BoardDetailResponse detail = boardService.detail(idx);
 
@@ -51,14 +49,10 @@ public class BoardController {
     public ResponseEntity<Void> write(@RequestBody BoardWriteDTO boardWriteDTO,
                                       @RequestAttribute("userIdx") long idx) {
 
-
-        log.info("idx: {}", idx);
         boardWriteDTO.setUserIdx(idx);
-        log.info("data input: {}", boardWriteDTO.toString());
 
 
         boardService.write(boardWriteDTO);
-        log.info("data {}",  boardWriteDTO.toString());
         return ResponseEntity.ok().build();
     }
     @GetMapping("/count")
@@ -70,12 +64,16 @@ public class BoardController {
     @GetMapping("/comment")
     public ResponseEntity<?> comment(@ModelAttribute CommentReq req,
                                         @RequestAttribute("userIdx") long userIdx){
-        log.info("comment {} ", req.toString());
         req.setUserIdx(userIdx);
         boardService.insertcomment(req);
 
 
         return ResponseEntity.ok().build();
+    }
+    @GetMapping("/selectplan")
+    public ResponseEntity<List<SelectPlanDTO>> selectplan(@RequestAttribute("userIdx") long userIdx){
+        List<SelectPlanDTO> planResponse = boardService.selectplan(userIdx);
+        return ResponseEntity.ok(planResponse);
     }
 
 }

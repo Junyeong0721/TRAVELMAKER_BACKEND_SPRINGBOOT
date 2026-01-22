@@ -3,6 +3,7 @@ package kr.soft.login.mapper;
 import kr.soft.login.dto.PlanDetailDto;
 import kr.soft.login.dto.PlanResponse;
 import kr.soft.login.dto.PlanSaveRequest;
+import kr.soft.login.dto.plan.SelectPlanDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -29,5 +30,7 @@ public interface PlanMapper {
     void updatePlanTitle(Long planIdx, String title);
 
     void deleteDetailsByPlanIdx(Long planIdx);
+
+    List<SelectPlanDTO> selectplan(Long userIdx);
 
 }
