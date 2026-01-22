@@ -120,6 +120,19 @@
         WHERE IDX = #{idx}
     </update>
 
+    <insert id="insertcomment" parameterType="CommentReq">
+        INSERT INTO COMMENTS (
+            POST_IDX,
+            USER_IDX,
+            CONTENT,
+            DELETE_YN,
+            CREATE_AT
+        ) VALUES (
+            #{postIdx},   #{userIdx},   #{content},   'N',
+            CURRENT_TIMESTAMP
+        )
+    </insert>
+
 
 
 
