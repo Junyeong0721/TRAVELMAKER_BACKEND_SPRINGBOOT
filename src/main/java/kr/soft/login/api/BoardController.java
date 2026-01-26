@@ -1,10 +1,7 @@
 package kr.soft.login.api;
 
 import kr.soft.login.config.jwt.JwtTokenProvider;
-import kr.soft.login.dto.Board.BoardDetailDTO;
-import kr.soft.login.dto.Board.BoardDetailResponse;
-import kr.soft.login.dto.Board.BoardListDTO;
-import kr.soft.login.dto.Board.BoardWriteDTO;
+import kr.soft.login.dto.Board.*;
 import kr.soft.login.dto.comment.CommentReq;
 import kr.soft.login.dto.plan.SelectPlanDTO;
 import kr.soft.login.mapper.BoardMapper;
@@ -37,9 +34,11 @@ public class BoardController {
     }
 
     @GetMapping("/detail")
-    public ResponseEntity<BoardDetailResponse> detail(@RequestParam("idx") Long idx) {
+    public ResponseEntity<BoardDetailResponse> detail(@RequestParam("idx") Long idx, @RequestAttribute("userIdx") long userIdx) {
 
-        BoardDetailResponse detail = boardService.detail(idx);
+        BoardDetailResponse detail = boardService.detail(idx, userIdx);
+
+
 
         return ResponseEntity.ok(detail);
 
@@ -74,6 +73,26 @@ public class BoardController {
     public ResponseEntity<List<SelectPlanDTO>> selectplan(@RequestAttribute("userIdx") long userIdx){
         List<SelectPlanDTO> planResponse = boardService.selectplan(userIdx);
         return ResponseEntity.ok(planResponse);
+    }
+    @GetMapping("/edit")
+    public ResponseEntity<?> edit(@RequestParam("idx") Long idx){
+
+        BoardEditDTO boardEditDTO = boardService.edit(idx);
+
+        return  ResponseEntity.ok(boardEditDTO);
+    }
+    @PostMapping("/update")
+    public ResponseEntity<?> update(@RequestBody BoardUpdateDTO boardUpdateDTO){
+        boardService.update(boardUpdateDTO);
+        log.info("update = {}", boardUpdateDTO.toString());
+        return ResponseEntity.ok().build();
+    }
+    @GetMapping("/delete")
+    public ResponseEntity<?> delete(@RequestParam("idx") Long idx){
+
+        boardService.delete(idx);
+
+        return ResponseEntity.ok().build();
     }
 
 }

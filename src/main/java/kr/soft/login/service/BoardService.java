@@ -1,9 +1,6 @@
 package kr.soft.login.service;
 
-import kr.soft.login.dto.Board.BoardDetailDTO;
-import kr.soft.login.dto.Board.BoardDetailResponse;
-import kr.soft.login.dto.Board.BoardListDTO;
-import kr.soft.login.dto.Board.BoardWriteDTO;
+import kr.soft.login.dto.Board.*;
 import kr.soft.login.dto.comment.CommentReq;
 import kr.soft.login.dto.plan.SelectPlanDTO;
 import kr.soft.login.mapper.BoardMapper;
@@ -28,11 +25,19 @@ public class BoardService {
 
         return lists;
     }
-    public BoardDetailResponse detail(Long idx){
+    public BoardDetailResponse detail(Long idx, Long userIdx){
 
         boardMapper.plusViewCount(idx);
 
         BoardDetailResponse response = new BoardDetailResponse();
+
+        long resultMine = boardMapper.mine(idx);
+
+        if(resultMine == userIdx){
+            response.setMine(true);
+        }
+        else
+            response.setMine(false);
 
         response.setPost(boardMapper.detail(idx));
         response.setRoadmap(boardMapper.roadmap(idx));
@@ -56,5 +61,16 @@ public class BoardService {
     public List<SelectPlanDTO> selectplan(Long userIdx){
         List<SelectPlanDTO> resultDTO = planMapper.selectplan(userIdx);
         return resultDTO;
+    }
+    public BoardEditDTO edit(Long postIdx){
+        BoardEditDTO editDTO = boardMapper.edit(postIdx);
+        return editDTO;
+    }
+    public void update(BoardUpdateDTO boardUpdateDTO){
+        boardMapper.updateBoard(boardUpdateDTO);
+    }
+    public void delete(Long idx){
+        log.info("@@@@@@@@@@delete@@@@@@@@@");
+        boardMapper.deletePost(idx);
     }
 }

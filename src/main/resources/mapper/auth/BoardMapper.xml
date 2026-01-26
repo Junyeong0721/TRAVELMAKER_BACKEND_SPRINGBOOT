@@ -55,6 +55,11 @@
             #{thumbnail}
         )
     </insert>
+    <select id="mine" resultType="long">
+        SELECT USER_IDX
+        FROM POSTS
+        WHERE IDX = #{param}
+    </select>
     <select id="count" resultType="int">
         SELECT COUNT(*)
         FROM POSTS
@@ -132,6 +137,38 @@
             CURRENT_TIMESTAMP
         )
     </insert>
+
+    <select id="edit" parameterType="long" resultType="BoardEditDTO">
+        SELECT
+            IDX as postIdx,
+            TITLE as title,
+            CONTENT as content,
+            THUMBNAIL as thumbnail,
+            PLAN_IDX as planIdx
+        FROM
+            POSTS
+        WHERE
+            IDX = #{postIdx}
+    </select>
+    <update id="updateBoard" parameterType="BoardUpdateDTO">
+        UPDATE
+            POSTS
+        SET
+            TITLE = #{title},
+            CONTENT = #{content},
+            THUMBNAIL = #{thumbnail},
+            PLAN_IDX = #{planIdx}
+        WHERE
+            IDX = #{idx}
+    </update>
+    <update id="deletePost" parameterType="long">
+        UPDATE
+            POSTS
+        SET
+            STATUS = 'DELETED'
+        WHERE
+            IDX = #{idx}
+    </update>
 
 
 
