@@ -95,4 +95,12 @@ public class BoardController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/top3")
+    public ResponseEntity<List<BoardTop3DTO>> top3(){
+
+        List<BoardTop3DTO> toplist = boardService.top3();
+
+        return ResponseEntity.ok(toplist);
+    }
+
 }

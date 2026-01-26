@@ -73,4 +73,8 @@ public class BoardService {
         log.info("@@@@@@@@@@delete@@@@@@@@@");
         boardMapper.deletePost(idx);
     }
+    public List<BoardTop3DTO> top3(){
+        List<BoardTop3DTO> toplist = boardMapper.top3();
+        return toplist;
+    }
 }

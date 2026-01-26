@@ -34,4 +34,6 @@ public interface BoardMapper {
     void updateBoard(BoardUpdateDTO boardUpdateDTO);
 
     void deletePost(Long idx);
+
+    List<BoardTop3DTO> top3();
 }
