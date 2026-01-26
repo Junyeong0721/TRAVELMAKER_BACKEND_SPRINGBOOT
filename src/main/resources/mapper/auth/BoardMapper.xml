@@ -169,6 +169,23 @@
         WHERE
             IDX = #{idx}
     </update>
+    <select id="top3" resultType="BoardTop3DTO">
+        SELECT
+            p.IDX,
+            p.TITLE,
+            p.THUMBNAIL,
+            p.VIEW_COUNT AS viewCount,
+            p.CONTENT,
+            (SELECT COUNT(*) FROM LIKES l WHERE l.POST_IDX = p.IDX) AS likeCount,
+            (SELECT COUNT(*) FROM COMMENTS c WHERE c.POST_IDX = p.IDX) AS commentCount
+        FROM
+            POSTS p
+        WHERE
+            p.STATUS = 'PUBLISHED'
+        ORDER BY
+            p.VIEW_COUNT DESC
+        LIMIT 3
+    </select>
 
 
 
