@@ -10,5 +10,6 @@ import java.util.List;
 public class BoardDetailResponse {
     private BoardDetailDTO post;          // 게시글 내용
     private List<RoadmapDTO> roadmap;     // 일정(로드맵) 리스트
-    private List<CommentDTO> comments;    // 댓글 리스트
+    private List<CommentDTO> comments;
+    private boolean mine;
 }
