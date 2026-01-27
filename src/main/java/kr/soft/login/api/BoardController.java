@@ -102,5 +102,26 @@ public class BoardController {
 
         return ResponseEntity.ok(toplist);
     }
+    @GetMapping("/bestlist")
+    public ResponseEntity<List<BoardListDTO>> bestlist(@RequestParam(defaultValue = "0") int offset) {
+
+        List<BoardListDTO> boardlist = boardService.bestlist(offset);
+        log.info("bestlist = {}", boardlist.toString());
+        log.info("bestlist@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+
+
+        return ResponseEntity.ok(boardlist);
+    }
+    @GetMapping("/mylist")
+    public ResponseEntity<List<BoardListDTO>> mylist(@RequestParam(defaultValue = "0") int offset, @RequestAttribute("userIdx") long userIdx) {
+
+        BoardMyListParam boardMyListParam = new BoardMyListParam();
+        boardMyListParam.setOffset(offset);
+        boardMyListParam.setUserIdx(userIdx);
+        List<BoardListDTO> boardlist = boardService.mylist(boardMyListParam);
+
+
+        return ResponseEntity.ok(boardlist);
+    }
 
 }

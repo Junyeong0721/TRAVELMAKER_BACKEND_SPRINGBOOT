@@ -5,40 +5,72 @@
 <mapper namespace="kr.soft.login.mapper.BoardMapper">
     <select id="list" parameterType="int" resultType="BoardListDTO">
         SELECT
-            p.IDX,
-            p.TITLE,
-            m.NICKNAME,
-            m.MBTI,
-            p.VIEW_COUNT,
-            p.THUMBNAIL, -- ✅ 추가된 부분
-            COUNT(DISTINCT l.IDX) AS LIKE_COUNT,
-            p.CREATE_AT,
-            m.TITLE AS USER_GRADE,
-            COUNT(DISTINCT c.IDX) AS COMMENT_COUNT
+        p.IDX,
+        p.TITLE,
+        m.NICKNAME,
+        m.MBTI,
+        p.VIEW_COUNT,
+        p.THUMBNAIL,
+        p.CREATE_AT,
+        m.TITLE AS USER_GRADE,
+        (SELECT COUNT(DISTINCT l.IDX) FROM LIKES l WHERE l.POST_IDX = p.IDX) AS LIKE_COUNT,
+        (SELECT COUNT(DISTINCT c.IDX) FROM COMMENTS c WHERE c.POST_IDX = p.IDX AND c.DELETE_YN = 'N') AS COMMENT_COUNT
         FROM
-            POSTS p
+        POSTS p
         INNER JOIN
-            MEMBER m ON p.USER_IDX = m.IDX
-        LEFT JOIN
-            COMMENTS c ON p.IDX = c.POST_IDX AND c.DELETE_YN = 'N'
-        LEFT JOIN
-            LIKES l ON p.IDX = l.POST_IDX
+        MEMBER m ON p.USER_IDX = m.IDX
         WHERE
-            p.STATUS = 'PUBLISHED'
-        GROUP BY
-            p.IDX,
-            p.TITLE,
-            p.VIEW_COUNT,
-            p.CREATE_AT,
-            p.THUMBNAIL, -- ✅ GROUP BY에도 반드시 추가해야 에러가 안 납니다
-            m.NICKNAME,
-            m.MBTI,
-            m.TITLE
+        p.STATUS = 'PUBLISHED'
         ORDER BY
-            p.CREATE_AT DESC
+        p.CREATE_AT DESC
         LIMIT 4 OFFSET #{offset}
+    </select>
 
+    <select id="bestlist" parameterType="int" resultType="BoardListDTO">
+        SELECT
+        p.IDX,
+        p.TITLE,
+        m.NICKNAME,
+        m.MBTI,
+        p.VIEW_COUNT,
+        p.THUMBNAIL,
+        p.CREATE_AT,
+        m.TITLE AS USER_GRADE,
+        (SELECT COUNT(DISTINCT l.IDX) FROM LIKES l WHERE l.POST_IDX = p.IDX) AS LIKE_COUNT,
+        (SELECT COUNT(DISTINCT c.IDX) FROM COMMENTS c WHERE c.POST_IDX = p.IDX AND c.DELETE_YN = 'N') AS COMMENT_COUNT
+        FROM
+        POSTS p
+        INNER JOIN
+        MEMBER m ON p.USER_IDX = m.IDX
+        WHERE
+        p.STATUS = 'PUBLISHED'
+        ORDER BY
+        p.VIEW_COUNT DESC, p.CREATE_AT DESC
+        LIMIT 4 OFFSET #{offset}
+    </select>
 
+    <select id="mylist" parameterType="BoardMyListParam" resultType="BoardListDTO">
+        SELECT
+        p.IDX,
+        p.TITLE,
+        m.NICKNAME,
+        m.MBTI,
+        p.VIEW_COUNT,
+        p.THUMBNAIL,
+        p.CREATE_AT,
+        m.TITLE AS USER_GRADE,
+        (SELECT COUNT(DISTINCT l.IDX) FROM LIKES l WHERE l.POST_IDX = p.IDX) AS LIKE_COUNT,
+        (SELECT COUNT(DISTINCT c.IDX) FROM COMMENTS c WHERE c.POST_IDX = p.IDX AND c.DELETE_YN = 'N') AS COMMENT_COUNT
+        FROM
+        POSTS p
+        INNER JOIN
+        MEMBER m ON p.USER_IDX = m.IDX
+        WHERE
+        p.STATUS = 'PUBLISHED'
+        AND p.USER_IDX = #{userIdx, jdbcType=BIGINT}
+        ORDER BY
+        p.CREATE_AT DESC
+        LIMIT 4 OFFSET #{offset}
     </select>
     <insert id="write" parameterType="BoardWriteDTO">
         INSERT INTO POSTS (

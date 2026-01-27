@@ -41,7 +41,7 @@ public class BoardService {
         response.setPost(boardMapper.detail(idx));
         response.setRoadmap(boardMapper.roadmap(idx));
         response.setComments(boardMapper.comment(idx));
-        response.setCheckedLike(likeMapper.checkLike(idx, userIdx) >q 0);
+        response.setCheckedLike(likeMapper.checkLike(idx, userIdx) > 0);
         return response;
 
 
@@ -76,6 +76,16 @@ public class BoardService {
     public List<BoardTop3DTO> top3(){
         List<BoardTop3DTO> toplist = boardMapper.top3();
         return toplist;
+    }
+    public List<BoardListDTO> bestlist(int offset) {
+        List<BoardListDTO> lists = boardMapper.bestlist(offset);
+
+        return lists;
+    }
+    public List<BoardListDTO> mylist(BoardMyListParam boardMyListParam) {
+        List<BoardListDTO> lists = boardMapper.mylist(boardMyListParam);
+
+        return lists;
     }
 
 }
