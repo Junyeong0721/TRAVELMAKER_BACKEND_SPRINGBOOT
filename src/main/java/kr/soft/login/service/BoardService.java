@@ -4,6 +4,7 @@ import kr.soft.login.dto.Board.*;
 import kr.soft.login.dto.comment.CommentReq;
 import kr.soft.login.dto.plan.SelectPlanDTO;
 import kr.soft.login.mapper.BoardMapper;
+import kr.soft.login.mapper.LikeMapper;
 import kr.soft.login.mapper.PlanMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class BoardService {
     private  BoardMapper boardMapper;
     @Autowired
     private PlanMapper planMapper;
+    @Autowired
+    private LikeMapper likeMapper;
 
     public List<BoardListDTO> list(int offset) {
         List<BoardListDTO> lists = boardMapper.list(offset);
@@ -33,15 +36,12 @@ public class BoardService {
 
         long resultMine = boardMapper.mine(idx);
 
-        if(resultMine == userIdx){
-            response.setMine(true);
-        }
-        else
-            response.setMine(false);
+        response.setMine(resultMine == userIdx);
 
         response.setPost(boardMapper.detail(idx));
         response.setRoadmap(boardMapper.roadmap(idx));
         response.setComments(boardMapper.comment(idx));
+        response.setCheckedLike(likeMapper.checkLike(idx, userIdx) >q 0);
         return response;
 
 
@@ -77,4 +77,5 @@ public class BoardService {
         List<BoardTop3DTO> toplist = boardMapper.top3();
         return toplist;
     }
+
 }

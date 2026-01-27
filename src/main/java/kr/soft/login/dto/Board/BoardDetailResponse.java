@@ -12,4 +12,5 @@ public class BoardDetailResponse {
     private List<RoadmapDTO> roadmap;     // 일정(로드맵) 리스트
     private List<CommentDTO> comments;
     private boolean mine;
+    private boolean isCheckedLike;
 }
