@@ -62,4 +62,12 @@
         AND f.FOLLOWING_IDX = m.idx  AND f.DELETE_YN = 'N') > 0 AS isFollowBack
 
         FROM member m  WHERE m.nickname LIKE CONCAT('%', #{keyword}, '%') AND m.idx != #{myIdx} </select>
+
+    <select id="checkFollow" resultType="int">
+        SELECT count(*)
+        FROM follow
+        WHERE FOLLOW_IDX = #{followerIdx}
+        AND FOLLOWING_IDX = #{followingIdx}
+        AND DELETE_YN = 'N'  </select>
 </mapper>
+

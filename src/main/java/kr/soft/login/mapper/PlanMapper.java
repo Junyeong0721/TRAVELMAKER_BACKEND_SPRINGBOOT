@@ -3,6 +3,7 @@ package kr.soft.login.mapper;
 import kr.soft.login.dto.PlanDetailDto;
 import kr.soft.login.dto.PlanResponse;
 import kr.soft.login.dto.PlanSaveRequest;
+import kr.soft.login.dto.plan.SelectPlanDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -28,7 +29,12 @@ public interface PlanMapper {
 
     void updatePlanTitle(Long planIdx, String title);
 
+    // 기존에 있던 상세 삭제 메서드
     void deleteDetailsByPlanIdx(Long planIdx);
 
+    // HEAD에서 추가된 메서드 (위의 deleteDetailsByPlanIdx와 중복인지 확인 필요)
     void deletePlanDetails(Long planIdx);
+
+    // main에서 추가된 조회 메서드
+    List<SelectPlanDTO> selectplan(Long userIdx);
 }

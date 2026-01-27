@@ -88,4 +88,17 @@
         DELETE FROM plan_detail WHERE PLAN_IDX = #{planIdx}
     </delete>
 
+    <select id="selectplan" resultType="SelectPlanDTO">
+        SELECT
+            IDX,
+            TITLE
+        FROM
+            PLANS
+        WHERE
+            USER_IDX = #{userIdx}
+          AND DELETE_YN = 'N'
+        ORDER BY
+            CREATE_AT desc;
+    </select>
+
 </mapper>

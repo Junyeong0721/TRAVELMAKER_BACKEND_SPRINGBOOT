@@ -1,8 +1,6 @@
 package kr.soft.login.mapper;
 
-import kr.soft.login.dto.Board.BoardDetailDTO;
-import kr.soft.login.dto.Board.BoardListDTO;
-import kr.soft.login.dto.Board.BoardWriteDTO;
+import kr.soft.login.dto.Board.*;
 import kr.soft.login.dto.comment.CommentDTO;
 import kr.soft.login.dto.comment.CommentReq;
 import kr.soft.login.dto.map.RoadmapDTO;
@@ -25,7 +23,17 @@ public interface BoardMapper {
 
     void plusViewCount(Long param);
 
+    long mine(Long param);
+
+    BoardEditDTO edit(Long param);
+
     int count();
 
     void insertcomment(CommentReq req);
+
+    void updateBoard(BoardUpdateDTO boardUpdateDTO);
+
+    void deletePost(Long idx);
+
+    List<BoardTop3DTO> top3();
 }

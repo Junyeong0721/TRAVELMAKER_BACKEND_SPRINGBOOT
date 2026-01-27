@@ -15,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FollowController {
 
+    // Service 주입 (이 부분이 있어야 아래 메서드들이 작동합니다)
     private final FollowService followService;
 
     // 버튼 누를 때마다 실행 (팔로우 <-> 언팔로우)
@@ -45,11 +46,10 @@ public class FollowController {
             @RequestAttribute("userIdx") Long myIdx,
             @RequestParam("keyword") String keyword
     ) {
-
         log.info("MHS");
         log.info("idx: {}", myIdx);
         log.info("keyword: {}", keyword);
-        List<FollowDTO>  lists = followService.searchUser(myIdx, keyword);
+        List<FollowDTO> lists = followService.searchUser(myIdx, keyword);
         log.info("size: {}", lists.size());
         return ResponseEntity.ok(lists);
     }

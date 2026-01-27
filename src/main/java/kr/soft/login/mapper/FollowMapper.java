@@ -28,4 +28,5 @@ public interface FollowMapper {
 
     // 검색 기능
     List<FollowDTO> searchUser(@Param("myIdx") Long myIdx, @Param("keyword") String keyword);
+    int checkFollow(@Param("followerIdx") Long followerIdx, @Param("followingIdx") Long followingIdx);
 }
