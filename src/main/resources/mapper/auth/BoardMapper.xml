@@ -85,7 +85,10 @@
         c.CONTENT as content,
         c.CREATE_AT as createAt,
         m.NICKNAME as nickname,
-        m.MBTI as mbti
+        m.MBTI as mbti,
+
+        -- ✅ [추가] 이게 있어야 클릭했을 때 이동합니다!
+        c.USER_IDX as userIdx
         FROM
         COMMENTS c
         INNER JOIN
