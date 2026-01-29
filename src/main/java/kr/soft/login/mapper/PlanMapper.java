@@ -29,8 +29,12 @@ public interface PlanMapper {
 
     void updatePlanTitle(Long planIdx, String title);
 
+    // 기존에 있던 상세 삭제 메서드
     void deleteDetailsByPlanIdx(Long planIdx);
 
-    List<SelectPlanDTO> selectplan(Long userIdx);
+    // HEAD에서 추가된 메서드 (위의 deleteDetailsByPlanIdx와 중복인지 확인 필요)
+    void deletePlanDetails(Long planIdx);
 
+    // main에서 추가된 조회 메서드
+    List<SelectPlanDTO> selectplan(Long userIdx);
 }

@@ -9,4 +9,6 @@ public class CommentDTO {
     private String mbti;         // m.MBTI
     private String content;      // c.CONTENT
     private String createAt;
+    private Long userIdx;
 }
+

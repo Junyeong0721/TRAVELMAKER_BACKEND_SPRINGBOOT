@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.soft.login.mapper.OtherMapper">
+
+    <select id="getProfile" resultType="kr.soft.login.dto.other.OtherProfileDTO">
+        SELECT
+        m.IDX AS userIdx,
+        m.NICKNAME AS nickname,
+        m.MBTI AS mbti,
+
+        -- ✅ [수정] DB에 컬럼이 없으므로 그냥 NULL로 반환 (에러 해결)
+        NULL AS profileImg,
+
+        -- DB의 USER_COMMENT를 statusMessage로 매핑
+        m.USER_COMMENT AS statusMessage,
+
+        -- 게시글 수
+        (SELECT COUNT(*) FROM POSTS p WHERE p.USER_IDX = m.IDX AND p.STATUS = 'PUBLISHED') AS postCount,
+
+        -- 팔로워 수 (상대를 구독하는 사람)
+        (SELECT COUNT(*) FROM FOLLOW f WHERE f.FOLLOWING_IDX = m.IDX AND f.DELETE_YN = 'N') AS followerCount,
+
+        -- 팔로잉 수 (상대가 구독하는 사람)
+        (SELECT COUNT(*) FROM FOLLOW f WHERE f.FOLLOW_IDX = m.IDX AND f.DELETE_YN = 'N') AS followingCount,
+
+        -- 내가 이 사람을 팔로우했는지 확인 (1=true, 0=false)
+        CASE
+        WHEN (SELECT COUNT(*) FROM FOLLOW f
+        WHERE f.FOLLOWING_IDX = m.IDX    -- 상대방(타겟)
+        AND f.FOLLOW_IDX = #{myUserIdx} -- 나(로그인한 사람)
+        AND f.DELETE_YN = 'N') > 0
+        THEN 1
+        ELSE 0
+        END AS isFollowed
+
+        FROM MEMBER m
+        WHERE m.IDX = #{targetUserIdx}
+    </select>
+
+    <select id="getPosts" resultType="kr.soft.login.dto.other.OtherPostDTO">
+        SELECT
+        IDX,
+        TITLE,
+        THUMBNAIL,
+        DATE_FORMAT(CREATE_AT, '%Y.%m.%d') AS createAt
+        FROM POSTS
+        WHERE USER_IDX = #{targetUserIdx}
+        AND STATUS = 'PUBLISHED'
+        ORDER BY CREATE_AT DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="getPostCount" resultType="int">
+        SELECT COUNT(*)
+        FROM POSTS
+        WHERE USER_IDX = #{targetUserIdx}
+        AND STATUS = 'PUBLISHED'
+    </select>
+
+</mapper>
