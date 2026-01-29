@@ -47,7 +47,13 @@ public class PlanService {
     @Transactional
     public void deletePlan(Long planIdx) {
         planMapper.deletePlan(planIdx);
+        // 1. 딸린 세부 일정들(details)을 먼저 다 삭제
+        planMapper.deletePlanDetails(planIdx);
+
+        // 2. 그 다음 껍데기(plan) 삭제
+        planMapper.deletePlan(planIdx);
     }
+
 
     // 1. 단건 조회
     public PlanResponse getPlan(Long planIdx) {
