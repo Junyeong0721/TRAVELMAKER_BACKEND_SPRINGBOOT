@@ -231,4 +231,43 @@
         LIMIT 3
     </select>
 
+
+    <select id="search" resultType="BoardListDTO">
+        SELECT
+        p.IDX,
+        p.TITLE,
+        m.NICKNAME,
+        m.MBTI,
+        p.VIEW_COUNT,
+        p.THUMBNAIL,
+        p.CREATE_AT,
+        m.TITLE AS USER_GRADE,
+        (SELECT COUNT(DISTINCT l.IDX) FROM LIKES l WHERE l.POST_IDX = p.IDX) AS LIKE_COUNT,
+        (SELECT COUNT(DISTINCT c.IDX) FROM COMMENTS c WHERE c.POST_IDX = p.IDX AND c.DELETE_YN = 'N') AS COMMENT_COUNT
+        FROM
+        POSTS p
+        INNER JOIN
+        MEMBER m ON p.USER_IDX = m.IDX
+        WHERE
+        p.STATUS = 'PUBLISHED'
+        AND p.TITLE LIKE CONCAT('%', #{keyword}, '%')
+        ORDER BY
+        p.CREATE_AT DESC
+        LIMIT 4 OFFSET #{offset}
+    </select>
+
+    <select id="searchCount" resultType="int">
+        SELECT COUNT(*)
+        FROM POSTS
+        WHERE STATUS = 'PUBLISHED'
+        AND TITLE LIKE CONCAT('%', #{keyword}, '%')
+    </select>
+
+
+
+
+
 </mapper>
+
+
+

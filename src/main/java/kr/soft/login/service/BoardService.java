@@ -97,8 +97,20 @@ public class BoardService {
         return boardMapper.bestlist(offset);
     }
 
+
+    public List<BoardListDTO> search(String keyword, int offset) {
+        // 매퍼에 파라미터 두 개를 그대로 전달
+        return boardMapper.search(keyword, offset);
+    }
+
+    public int getSearchCount(String keyword) {
+        return boardMapper.searchCount(keyword);
+    }
+
+
     // [추가됨] 내가 쓴 글 목록 (Controller에 있는데 누락되어 있어서 추가)
     public List<BoardListDTO> mylist(BoardMyListParam param) {
         return boardMapper.mylist(param);
     }
 }
+
