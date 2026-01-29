@@ -13,6 +13,10 @@ import java.util.List;
 public interface BoardMapper {
     List<BoardListDTO> list(int offset);
 
+    List<BoardListDTO> bestlist(int offset);
+
+    List<BoardListDTO> mylist(BoardMyListParam boardMyListParam);
+
     BoardDetailDTO detail(Long param);
 
     List<RoadmapDTO> roadmap(Long param);

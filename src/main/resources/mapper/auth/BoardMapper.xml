@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<?xml version="1.0" encoding = "UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.soft.login.mapper.BoardMapper">
 
-    <select id="list" parameterType="int" resultType="BoardListDTO">
+    <select id="list" resultType="kr.soft.login.dto.Board.BoardListDTO">
         SELECT
         p.IDX,
         p.TITLE,
@@ -26,20 +27,79 @@
         LIMIT 4 OFFSET #{offset}
     </select>
 
+    <select id="bestlist" resultType="kr.soft.login.dto.Board.BoardListDTO">
+        SELECT
+        p.IDX,
+        p.TITLE,
+        m.NICKNAME,
+        m.MBTI,
+        p.VIEW_COUNT,
+        p.THUMBNAIL,
+        p.CREATE_AT,
+        m.TITLE AS USER_GRADE,
+        (SELECT COUNT(*) FROM LIKES l WHERE l.POST_IDX = p.IDX) AS LIKE_COUNT,
+        (SELECT COUNT(*) FROM COMMENTS c WHERE c.POST_IDX = p.IDX AND c.DELETE_YN = 'N') AS COMMENT_COUNT
+        FROM
+        POSTS p
+        INNER JOIN
+        MEMBER m ON p.USER_IDX = m.IDX
+        WHERE
+        p.STATUS = 'PUBLISHED'
+        ORDER BY
+        LIKE_COUNT DESC, p.VIEW_COUNT DESC
+        LIMIT 4 OFFSET #{offset}
+    </select>
+
+    <select id="mylist" parameterType="kr.soft.login.dto.Board.BoardMyListParam" resultType="kr.soft.login.dto.Board.BoardListDTO">
+        SELECT
+        p.IDX,
+        p.TITLE,
+        m.NICKNAME,
+        m.MBTI,
+        p.VIEW_COUNT,
+        p.THUMBNAIL,
+        p.CREATE_AT,
+        m.TITLE AS USER_GRADE,
+        (SELECT COUNT(*) FROM LIKES l WHERE l.POST_IDX = p.IDX) AS LIKE_COUNT,
+        (SELECT COUNT(*) FROM COMMENTS c WHERE c.POST_IDX = p.IDX AND c.DELETE_YN = 'N') AS COMMENT_COUNT
+        FROM
+        POSTS p
+        INNER JOIN
+        MEMBER m ON p.USER_IDX = m.IDX
+        WHERE
+        p.STATUS = 'PUBLISHED'
+        AND p.USER_IDX = #{userIdx}
+        ORDER BY
+        p.CREATE_AT DESC
+        LIMIT 4 OFFSET #{offset}
+    </select>
+
     <insert id="write" parameterType="BoardWriteDTO">
         INSERT INTO POSTS (
-        USER_IDX, PLAN_IDX, TITLE, CONTENT, THUMBNAIL
+        USER_IDX,
+        PLAN_IDX,
+        TITLE,
+        CONTENT,
+        THUMBNAIL
         ) VALUES (
-        #{userIdx}, #{planIdx}, #{title}, #{content}, #{thumbnail}
+        #{userIdx},
+        #{planIdx},
+        #{title},
+        #{content},
+        #{thumbnail}
         )
     </insert>
 
     <select id="mine" resultType="long">
-        SELECT USER_IDX FROM POSTS WHERE IDX = #{param}
+        SELECT USER_IDX
+        FROM POSTS
+        WHERE IDX = #{param}
     </select>
 
     <select id="count" resultType="int">
-        SELECT COUNT(*) FROM POSTS WHERE STATUS = 'PUBLISHED'
+        SELECT COUNT(*)
+        FROM POSTS
+        WHERE STATUS = 'PUBLISHED'
     </select>
 
     <select id="detail" parameterType="long" resultType="BoardDetailDTO">
@@ -49,12 +109,14 @@
         p.CONTENT,
         p.VIEW_COUNT,
         p.CREATE_AT,
+        p.THUMBNAIL,
         m.NICKNAME,
         m.MBTI,
         m.TITLE AS userGrade,
         m.USER_COMMENT AS userIntro,
-        (SELECT COUNT(*) FROM LIKES l WHERE l.POST_IDX = p.IDX) AS likeCount,
-        m.IDX AS userIdx
+        NULL AS PROFILE_IMG,    -- [수정] 컬럼이 없어서 NULL로 대체
+        m.IDX AS userIdx,       -- 작성자 번호는 유지
+        (SELECT COUNT(*) FROM LIKES l WHERE l.POST_IDX = p.IDX) AS likeCount
         FROM
         POSTS p
         INNER JOIN
@@ -86,9 +148,8 @@
         c.CREATE_AT as createAt,
         m.NICKNAME as nickname,
         m.MBTI as mbti,
-
-        -- ✅ [추가] 이게 있어야 클릭했을 때 이동합니다!
-        c.USER_IDX as userIdx
+        NULL as profileImg,  -- [수정] 컬럼이 없어서 NULL로 대체
+        m.IDX as userIdx
         FROM
         COMMENTS c
         INNER JOIN
@@ -100,14 +161,21 @@
     </select>
 
     <update id="plusViewCount" parameterType="long">
-        UPDATE POSTS SET VIEW_COUNT = VIEW_COUNT + 1 WHERE IDX = #{idx}
+        UPDATE POSTS
+        SET VIEW_COUNT = VIEW_COUNT + 1
+        WHERE IDX = #{idx}
     </update>
 
     <insert id="insertcomment" parameterType="CommentReq">
         INSERT INTO COMMENTS (
-        POST_IDX, USER_IDX, CONTENT, DELETE_YN, CREATE_AT
+        POST_IDX,
+        USER_IDX,
+        CONTENT,
+        DELETE_YN,
+        CREATE_AT
         ) VALUES (
-        #{postIdx}, #{userIdx}, #{content}, 'N', CURRENT_TIMESTAMP
+        #{postIdx},   #{userIdx},   #{content},   'N',
+        CURRENT_TIMESTAMP
         )
     </insert>
 
@@ -125,13 +193,24 @@
     </select>
 
     <update id="updateBoard" parameterType="BoardUpdateDTO">
-        UPDATE POSTS
-        SET TITLE = #{title}, CONTENT = #{content}, THUMBNAIL = #{thumbnail}, PLAN_IDX = #{planIdx}
-        WHERE IDX = #{idx}
+        UPDATE
+        POSTS
+        SET
+        TITLE = #{title},
+        CONTENT = #{content},
+        THUMBNAIL = #{thumbnail},
+        PLAN_IDX = #{planIdx}
+        WHERE
+        IDX = #{idx}
     </update>
 
     <update id="deletePost" parameterType="long">
-        UPDATE POSTS SET STATUS = 'DELETED' WHERE IDX = #{idx}
+        UPDATE
+        POSTS
+        SET
+        STATUS = 'DELETED'
+        WHERE
+        IDX = #{idx}
     </update>
 
     <select id="top3" resultType="BoardTop3DTO">
