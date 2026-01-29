@@ -123,5 +123,21 @@ public class BoardController {
 
         return ResponseEntity.ok(boardlist);
     }
+    // BoardController.java 에 추가
+    @GetMapping("/search")
+    public ResponseEntity<List<BoardListDTO>> search(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "0") int offset) {
+
+        List<BoardListDTO> searchList = boardService.search(keyword, offset);
+        return ResponseEntity.ok(searchList);
+    }
+
+    // 검색 결과에 따른 전체 개수 API (리액트의 totalPages 계산용)
+    @GetMapping("/searchCount")
+    public ResponseEntity<Integer> getSearchCount(@RequestParam String keyword) {
+        int count = boardService.getSearchCount(keyword);
+        return ResponseEntity.ok(count);
+    }
 
 }

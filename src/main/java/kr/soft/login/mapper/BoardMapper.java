@@ -5,6 +5,7 @@ import kr.soft.login.dto.comment.CommentDTO;
 import kr.soft.login.dto.comment.CommentReq;
 import kr.soft.login.dto.map.RoadmapDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import javax.xml.stream.events.Comment;
 import java.util.List;
@@ -40,4 +41,8 @@ public interface BoardMapper {
     void deletePost(Long idx);
 
     List<BoardTop3DTO> top3();
+
+    // BoardMapper.java 에 추가
+    List<BoardListDTO> search(@Param("keyword") String keyword, @Param("offset") int offset);
+    int searchCount(@Param("keyword") String keyword);
 }

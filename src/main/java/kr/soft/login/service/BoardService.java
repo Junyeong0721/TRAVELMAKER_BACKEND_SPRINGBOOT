@@ -88,4 +88,12 @@ public class BoardService {
         return lists;
     }
 
+    public List<BoardListDTO> search(String keyword, int offset) {
+        // 매퍼에 파라미터 두 개를 그대로 전달
+        return boardMapper.search(keyword, offset);
+    }
+
+    public int getSearchCount(String keyword) {
+        return boardMapper.searchCount(keyword);
+    }
 }
