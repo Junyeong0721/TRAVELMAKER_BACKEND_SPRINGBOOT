@@ -13,4 +13,5 @@ public class BoardDetailResponse {
     private List<CommentDTO> comments;
     private boolean mine;
     private boolean isCheckedLike;
+    private boolean checkedFollow; // ★ [추가] 팔로우 여부 확인용
 }
