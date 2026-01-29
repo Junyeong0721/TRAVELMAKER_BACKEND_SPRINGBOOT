@@ -5,6 +5,7 @@ import kr.soft.login.dto.comment.CommentDTO;
 import kr.soft.login.dto.comment.CommentReq;
 import kr.soft.login.dto.map.RoadmapDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import javax.xml.stream.events.Comment;
 import java.util.List;
@@ -17,8 +18,7 @@ public interface BoardMapper {
 
     List<BoardListDTO> mylist(BoardMyListParam boardMyListParam);
 
-    BoardDetailDTO detail(Long param);
-
+    BoardDetailDTO detail(@Param("idx") Long idx, @Param("userIdx") Long userIdx);
     List<RoadmapDTO> roadmap(Long param);
 
     List<CommentDTO> comment(Long param);

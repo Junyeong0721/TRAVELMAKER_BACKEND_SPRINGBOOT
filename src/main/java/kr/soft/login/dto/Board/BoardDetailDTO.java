@@ -16,5 +16,7 @@ public class BoardDetailDTO {
     private int likeCount;       // 좋아요 수 (별도 COUNT 쿼리 또는 JOIN)
     private Long userIdx;
     private boolean isFollowed;
+    private boolean isLiked;
+
 
 }
